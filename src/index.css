@@ -92,7 +92,7 @@ body {
         @apply w-screen fixed top-0 left-0 z-50 flex-center bg-black min-h-[7vh];
 
         nav {
-            @apply container mx-auto flex-between px-5 2xl:px-0;
+            @apply container mx-auto flex-between px-5 ;
 
             img {
                 @apply cursor-pointer hover:-translate-y-0.5 transition-all duration-300 ease-in-out;
@@ -113,7 +113,7 @@ body {
     }
 
     #hero {
-        @apply h-fit lg:h-[80vh] col-center mt-40 lg:mt-20 2xl:mt-[7vh];
+        @apply h-fit lg:h-[88vh] col-center mt-40 lg:mt-20 2xl:mt-[7vh];
 
         div {
             @apply relative z-10 col-center lg:translate-y-16;
@@ -141,7 +141,7 @@ body {
     }
 
     #product-viewer {
-        @apply container relative min-h-[93vh] mx-auto px-5 2xl:px-0 mt-40;
+        @apply container relative min-h-[93vh] mx-auto px-5 mt-40;
 
         h2 {
             @apply text-white font-semibold text-3xl lg:text-6xl;
