@@ -1,17 +1,36 @@
-import { useRef } from "react";
+import { useRef, useMemo, memo } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { performanceImages, performanceImgPositions } from "../constants/index.js";
-import {useMediaQuery} from "react-responsive";
+import { useMediaQuery } from "react-responsive";
 
 const Performance = () => {
     const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
     const sectionRef = useRef(null);
+    const timelineRef = useRef(null);
+
+    // Memoize images to avoid re-render
+    const images = useMemo(() => (
+        performanceImages.map((item, index) => (
+            <img
+                key={index}
+                src={item.src}
+                className={item.id}
+                alt={item.alt || `Performance Image #${index + 1}`}
+                style={{ willChange: 'transform, left, right, bottom' }}
+            />
+        ))
+    ), []);
 
     useGSAP(
         () => {
             const sectionEl = sectionRef.current;
             if (!sectionEl) return;
+
+            // Kill previous timeline if exists
+            if (timelineRef.current) {
+                timelineRef.current.kill();
+            }
 
             // Text Animation
             gsap.fromTo(
@@ -45,7 +64,6 @@ const Performance = () => {
                 },
             });
 
-            // Position Each Performance Image
             performanceImgPositions.forEach((item) => {
                 if (item.id === "p5") return;
 
@@ -60,6 +78,8 @@ const Performance = () => {
 
                 tl.to(selector, vars, 0);
             });
+
+            timelineRef.current = tl;
         },
         { scope: sectionRef, dependencies: [isMobile] }
     );
@@ -69,14 +89,7 @@ const Performance = () => {
             <h2>Next-level graphics performance. Game on.</h2>
 
             <div className="wrapper">
-                {performanceImages.map((item, index) => (
-                    <img
-                        key={index}
-                        src={item.src}
-                        className={item.id}
-                        alt={item.alt || `Performance Image #${index + 1}`}
-                    />
-                ))}
+                {images}
             </div>
 
             <div className="content">
@@ -86,14 +99,15 @@ const Performance = () => {
                     second-generation hardware-accelerated ray tracing engine that renders
                     images faster, so{" "}
                     <span className="text-white">
-            gaming feels more immersive and realistic than ever.
-          </span>{" "}
+                        gaming feels more immersive and realistic than ever.
+                    </span>{" "}
                     And Dynamic Caching optimizes fast on-chip memory to dramatically
                     increase average GPU utilization — driving a huge performance boost
                     for the most demanding pro apps and games.
                 </p>
             </div>
         </section>
-    )
-}
-export default Performance
+    );
+};
+
+export default memo(Performance);
