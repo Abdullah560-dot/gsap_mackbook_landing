@@ -15,11 +15,10 @@ useGLTF.preload("/models/macbook-16.glb");
 
 const ProductViewer = memo(() => {
   // Optimized store access using useCallback
- const color = useMacbookStore(state => state.color);
-const scale = useMacbookStore(state => state.scale);
-const setColor = useMacbookStore(state => state.setColor);
-const setScale = useMacbookStore(state => state.setScale);
-
+  const color = useMacbookStore((state) => state.color);
+  const scale = useMacbookStore((state) => state.scale);
+  const setColor = useMacbookStore((state) => state.setColor);
+  const setScale = useMacbookStore((state) => state.setScale);
 
   const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
 
