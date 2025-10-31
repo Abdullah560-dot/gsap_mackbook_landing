@@ -22,6 +22,7 @@ const Performance = () => {
           className={item.id}
           alt={item.alt || `Performance Image #${index + 1}`}
           style={{ willChange: "transform, left, right, bottom" }}
+          loading="lazy"
         />
       )),
     []
