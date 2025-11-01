@@ -1,3 +1,4 @@
+import { Loader } from "@react-three/drei";
 import React, { useEffect, useRef } from "react";
 
 const Hero = () => {
@@ -43,7 +44,7 @@ const Hero = () => {
         playsInline
         preload="auto"
         fetchPriority="high"
-        poster="/title.png"
+        poster={<Loader />}
       >
         <source src="/videos/hero.mp4" type="video/mp4" />
         {/* نص بديل في حال لم يُعرض الفيديو */}
