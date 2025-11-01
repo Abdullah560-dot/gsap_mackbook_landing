@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from "react";
 import NavBar from "./components/NavBar.jsx";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
@@ -13,12 +13,17 @@ const Performance = lazy(() => import("./components/Performance.jsx"));
 const Features = lazy(() => import("./components/Features.jsx"));
 const Highlights = lazy(() => import("./components/Highlights.jsx"));
 const Footer = lazy(() => import("./components/Footer.jsx"));
-
+// مكون التحميل الثابت
+const Loader = () => (
+  <div className="text-center h-[100vh] flex items-center justify-center text-gray-500 animate-pulse">
+    Loading...
+  </div>
+);
 const App = () => {
   return (
     <main>
       <NavBar />
-      <Suspense fallback={<div className="text-center py-10">Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <Hero />
         <ProductViewer />
         <Showcase />
