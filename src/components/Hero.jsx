@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 const Hero = () => {
-  const videoRef = useRef();
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -13,29 +13,44 @@ const Hero = () => {
     };
 
     video.addEventListener("canplay", handleCanPlay);
-
-    return () => {
-      video.removeEventListener("canplay", handleCanPlay);
-    };
+    return () => video.removeEventListener("canplay", handleCanPlay);
   }, []);
 
   return (
-    <section id="hero">
-      <div>
-        <h1>MacBook Pro</h1>
-        <img src="/title.png" alt="MacBook Title" loading="lazy" />
+    <section
+      id="hero"
+      className="relative flex flex-col items-center text-center py-10"
+    >
+      <div className="z-10">
+        <h1 className="text-4xl font-bold mb-4">MacBook Pro</h1>
+        {/* لا تستخدم loading="lazy" لأن هذه الصورة تظهر في الـ viewport */}
+        <img
+          src="/title.png"
+          alt="MacBook Title"
+          fetchPriority="high"
+          decoding="async"
+          width="400"
+          height="120"
+        />
       </div>
+
       <video
         ref={videoRef}
+        className="w-full h-auto object-cover"
         src="/videos/hero.mp4"
         autoPlay
         muted
         playsInline
-        preload="metadata"
-        // poster="/title.png"
-      />
+        preload="auto"
+        fetchPriority="high"
+        poster="/title.png"
+      >
+        <source src="/videos/hero.mp4" type="video/mp4" />
+        {/* نص بديل في حال لم يُعرض الفيديو */}
+        متصفحك لا يدعم تشغيل الفيديو.
+      </video>
       <button>Buy</button>
-      <p>From $1599 or $133/mo for 12 months</p>
+      <p className="mt-2 text-gray-600">From $1599 or $133/mo for 12 months</p>
     </section>
   );
 };
