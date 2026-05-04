@@ -51,7 +51,7 @@ const Hero = () => {
         متصفحك لا يدعم تشغيل الفيديو.
       </video>
       <button>Buy</button>
-      <p className="mt-2 text-gray-600">From $1599 or $133/mo for 12 months</p>
+      <p>From $1599 or $133/mo for 12 months</p>
     </section>
   );
 };
