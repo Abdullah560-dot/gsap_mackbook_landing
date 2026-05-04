@@ -1,18 +1,20 @@
-import { useRef, useMemo, memo } from "react";
+import { useRef, useMemo, memo, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   performanceImages,
   performanceImgPositions,
 } from "../constants/index.js";
 import { useMediaQuery } from "react-responsive";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const Performance = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 1024px)" });
   const sectionRef = useRef(null);
   const timelineRef = useRef(null);
 
-  // Memoize images to avoid re-render
   const images = useMemo(
     () =>
       performanceImages.map((item, index) => (
@@ -22,7 +24,6 @@ const Performance = () => {
           className={item.id}
           alt={item.alt || `Performance Image #${index + 1}`}
           style={{ willChange: "transform, left, right, bottom" }}
-          loading="lazy"
         />
       )),
     []
@@ -33,12 +34,11 @@ const Performance = () => {
       const sectionEl = sectionRef.current;
       if (!sectionEl) return;
 
-      // Kill previous timeline if exists
       if (timelineRef.current) {
         timelineRef.current.kill();
       }
 
-      // Text Animation
+      // Text animation
       gsap.fromTo(
         ".content p",
         { opacity: 0, y: 10 },
@@ -58,7 +58,6 @@ const Performance = () => {
 
       if (isMobile) return;
 
-      // Image Positioning Timeline
       const tl = gsap.timeline({
         defaults: { duration: 2, ease: "power1.inOut", overwrite: "auto" },
         scrollTrigger: {
@@ -79,7 +78,6 @@ const Performance = () => {
         if (typeof item.left === "number") vars.left = `${item.left}%`;
         if (typeof item.right === "number") vars.right = `${item.right}%`;
         if (typeof item.bottom === "number") vars.bottom = `${item.bottom}%`;
-
         if (item.transform) vars.transform = item.transform;
 
         tl.to(selector, vars, 0);
@@ -90,8 +88,13 @@ const Performance = () => {
     { scope: sectionRef, dependencies: [isMobile] }
   );
 
+  // 🔥 إعادة حساب بعد التحميل
+  useEffect(() => {
+    ScrollTrigger.refresh();
+  }, []);
+
   return (
-    <section id="performance" ref={sectionRef}>
+    <section id="performance" ref={sectionRef} className="relative z-10">
       <h2>Next-level graphics performance. Game on.</h2>
 
       <div className="wrapper">{images}</div>
@@ -100,14 +103,7 @@ const Performance = () => {
         <p>
           Run graphics-intensive workflows with a responsiveness that keeps up
           with your imagination. The M4 family of chips features a GPU with a
-          second-generation hardware-accelerated ray tracing engine that renders
-          images faster, so{" "}
-          <span className="text-white">
-            gaming feels more immersive and realistic than ever.
-          </span>{" "}
-          And Dynamic Caching optimizes fast on-chip memory to dramatically
-          increase average GPU utilization — driving a huge performance boost
-          for the most demanding pro apps and games.
+          second-generation hardware-accelerated ray tracing engine.
         </p>
       </div>
     </section>

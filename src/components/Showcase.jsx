@@ -1,36 +1,60 @@
 import { useMediaQuery } from "react-responsive";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect } from "react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Showcase = () => {
   const isTablet = useMediaQuery({ query: "(max-width: 1024px)" });
 
   useGSAP(() => {
-    if (!isTablet) {
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: "#showcase",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-          pin: true,
-        },
-      });
+    if (isTablet) return;
 
-      timeline
-        .to(".mask img", {
-          transform: "scale(1.1)",
-        })
-        .to(".content", { opacity: 1, y: 0, ease: "power1.in" });
-    }
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#showcase",
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+        pin: true,
+        pinSpacing: true,
+        invalidateOnRefresh: true,
+      },
+    });
+
+    timeline
+      .to(".mask img", {
+        scale: 1.1,
+      })
+      .to(".content", {
+        opacity: 1,
+        y: 0,
+        ease: "power1.in",
+      });
   }, [isTablet]);
 
+  // 🔥 مهم جداً لإعادة الحساب بعد تحميل العناصر
+  useEffect(() => {
+    ScrollTrigger.refresh();
+  }, []);
+
   return (
-    <section id="showcase">
+    <section id="showcase" className="relative z-20">
       <div className="media">
-        <video src="/videos/game.mp4" loop muted autoPlay playsInline fetchPriority="low" />
+        <video
+          src="/videos/game.mp4"
+          loop
+          muted
+          autoPlay
+          playsInline
+          preload="auto"
+          onLoadedData={() => ScrollTrigger.refresh()}
+        />
+
         <div className="mask">
-          <img src="/mask-logo.svg" alt="Mask Logo" loading="lazy" />
+          <img src="/mask-logo.svg" alt="Mask Logo" />
         </div>
       </div>
 
@@ -49,14 +73,11 @@ const Showcase = () => {
               </p>
               <p>
                 It drives Apple Intelligence on iPad Pro, so you can write,
-                create, and accomplish more with ease. All in a design that’s
-                unbelievably thin, light, and powerful.
+                create, and accomplish more with ease.
               </p>
               <p>
                 A brand-new display engine delivers breathtaking precision,
-                color accuracy, and brightness. And a next-gen GPU with
-                hardware-accelerated ray tracing brings console-level graphics
-                to your fingertips.
+                color accuracy, and brightness.
               </p>
               <p className="text-primary">
                 Learn more about Apple Intelligence
@@ -81,4 +102,5 @@ const Showcase = () => {
     </section>
   );
 };
+
 export default Showcase;
